@@ -19,7 +19,7 @@ export default function HomePage() {
   useEffect(() => {
     if (screen === "solo_clubs" && clubs.length === 0) {
       setLoading(true);
-      supabase.from("clubs").select("*").limit(100).then(({ data }) => {
+      supabase!.from("clubs").select("*").limit(100).then(({ data }) => {
         if (data) setClubs(data as Club[]);
         setLoading(false);
       });
@@ -28,9 +28,9 @@ export default function HomePage() {
 
   const handleLogin = async () => {
     setAuthError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase!.auth.signInWithPassword({ email, password });
     if (error) { setAuthError(error.message); return; }
-    const { data: profile } = await supabase.from("profiles").select("*").eq("id", (await supabase.auth.getUser()).data.user?.id).single();
+    const { data: profile } = await supabase!.from("profiles").select("*").eq("id", (await supabase!.auth.getUser()).data.user?.id).single();
     if (profile) {
       useGameStore.setState({ isLoggedIn: true, username: (profile as any).username, userId: (profile as any).id, lang: (profile as any).language_pref || "en" });
     }
@@ -39,7 +39,7 @@ export default function HomePage() {
 
   const handleSignup = async () => {
     setAuthError("");
-    const { error } = await supabase.auth.signUp({ email, password, options: { data: { username, display_name: username } } });
+    const { error } = await supabase!.auth.signUp({ email, password, options: { data: { username, display_name: username } } });
     if (error) { setAuthError(error.message); return; }
     setScreen("menu");
   };
@@ -48,7 +48,7 @@ export default function HomePage() {
   const startSoloGame = (club: Club) => {
     setSelectedClub(club);
     setLoading(true);
-    supabase.from("players").select("*").eq("club_id", club.id).order("pace", { ascending: false }).limit(23).then(({ data }) => {
+    supabase!.from("players").select("*").eq("club_id", club.id).order("pace", { ascending: false }).limit(23).then(({ data }) => {
       if (data) setSquad(data as any[]);
       setLoading(false);
       setScreen("solo_game");
