@@ -69,10 +69,10 @@ function buildEvents(
 ) {
   const events: MatchResult["events"] = [];
   for (let i = 0; i < homeGoals; i += 1) {
-    events.push({ minute: randomMinute(), text: `${homeName} score a goal.`, type: "goal" });
+    events.push({ minute: randomMinute(), text: `${homeName} scores a goal.`, type: "goal" });
   }
   for (let i = 0; i < awayGoals; i += 1) {
-    events.push({ minute: randomMinute(), text: `${awayName} score a goal.`, type: "goal" });
+    events.push({ minute: randomMinute(), text: `${awayName} scores a goal.`, type: "goal" });
   }
   for (let i = 0; i < homeCards + awayCards; i += 1) {
     events.push({ minute: randomMinute(), text: "Referee shows a yellow card.", type: "yellow" });
@@ -85,5 +85,5 @@ function buildEvents(
 }
 
 function randomMinute(): number {
-  return Math.max(1, Math.min(90, Math.round(Math.random() * 90)));
+  return Math.floor(Math.random() * 90) + 1;
 }

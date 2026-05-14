@@ -44,8 +44,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 3. Apply SQL in Supabase SQL editor:
 
-- `/home/runner/work/futtysim/futtysim/supabase/schema.sql`
-- `/home/runner/work/futtysim/futtysim/supabase/seed.sql`
+- `supabase/schema.sql`
+- `supabase/seed.sql`
 
 4. Run:
 
@@ -76,6 +76,11 @@ No custom backend servers are required.
 - Solo saves can use cheats.
 - Multiplayer saves/settings reject enabled cheats unless the authenticated user is `ConnorB`.
 - RLS policies enforce lobby participation for chat writes.
+
+## Username format
+
+- Allowed username characters for login/signup mapping: `a-z`, `0-9`, `.`, `_`, `-`.
+- The client sanitizes usernames to this set before generating internal auth emails (`<username>@pocket-manager.local`).
 
 ## Scripts
 

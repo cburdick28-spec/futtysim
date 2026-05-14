@@ -2,6 +2,7 @@ import type { Manager, Player } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 export function processRetirements(players: Player[], seasonYear: number): { updatedPlayers: Player[]; newManagers: Manager[] } {
+  // This function is intended to run once per season rollover.
   const updatedPlayers: Player[] = [];
   const newManagers: Manager[] = [];
 

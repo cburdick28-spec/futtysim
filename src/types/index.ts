@@ -9,8 +9,6 @@ export type LobbyStatus = "waiting" | "ready" | "in_progress" | "finished";
 export type OfferStatus = "pending" | "accepted" | "rejected" | "expired";
 
 export type SoloCheatKey = "infinite_money" | "edit_players" | "instant_sim" | "transfer_control";
-export type AdminCheatKey = SoloCheatKey | "force_transfers" | "disable_injuries" | "unlock_all_teams";
-
 export interface Profile {
   id: string;
   username: string;

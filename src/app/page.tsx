@@ -75,8 +75,13 @@ export default function HomePage() {
     if (!supabase) return;
     setError("");
     const normalized = username.trim();
-    if (!normalized || password.length < 6) return setError("Invalid credentials");
-    const email = `${normalized.toLowerCase().replace(/[^a-z0-9._-]/g, "") || "user"}@pocket-manager.local`;
+    const normalizedLocal = normalized.toLowerCase().replace(/[^a-z0-9._-]/g, "");
+    const invalidLocalPart =
+      normalizedLocal.startsWith(".") ||
+      normalizedLocal.endsWith(".") ||
+      normalizedLocal.includes("..");
+    if (!normalized || !normalizedLocal || invalidLocalPart || password.length < 6) return setError("Invalid credentials");
+    const email = `${normalizedLocal}@pocket-manager.local`;
     if (signup) {
       const { error: signupError } = await supabase.auth.signUp({ email, password, options: { data: { username: normalized } } });
       if (signupError) return setError(signupError.message);
@@ -202,7 +207,7 @@ export default function HomePage() {
   if (store.screen === "auth") return <AuthView t={t} lang={store.lang} username={username} password={password} error={error} setUsername={setUsername} setPassword={setPassword} onLogin={() => auth(false)} onSignup={() => auth(true)} onBack={() => store.setScreen("menu")} />;
   if (store.screen === "solo_settings") return <SoloSettingsView store={store} onBack={() => store.setScreen("menu")} />;
   if (store.screen === "solo_clubs") return <SoloClubsView store={store} loading={loading} onBack={() => store.setScreen("solo_settings")} onStart={startSolo} />;
-  if (store.screen === "solo_dashboard") return <SoloDashboardView store={store} result={lastResult} onBack={() => store.setScreen("menu")} onSim={simulateSolo} onAcceptOffer={(offer) => { store.setSelectedNationalTeam(store.nationalTeams.find((n) => n.id === offer.national_team_id) ?? null); store.setInternationalOffers(store.internationalOffers.filter((o) => o.id !== offer.id)); }} />;
+  if (store.screen === "solo_dashboard") return <SoloDashboardView store={store} result={lastResult} onBack={() => store.setScreen("menu")} onSim={simulateSolo} onAcceptOffer={(offer: InternationalOffer) => { store.setSelectedNationalTeam(store.nationalTeams.find((n) => n.id === offer.national_team_id) ?? null); store.setInternationalOffers(store.internationalOffers.filter((o) => o.id !== offer.id)); }} />;
   if (store.screen === "create_multi") return <CreateMultiView store={store} leagueName={leagueName} rules={rules} setLeagueName={setLeagueName} setRules={setRules} onCreate={createLobby} onBack={() => store.setScreen("menu")} />;
   if (store.screen === "join_multi") return <JoinMultiView store={store} joinCode={joinCode} setJoinCode={setJoinCode} joinLobby={joinLobby} joinTeamId={joinTeamId} setJoinTeamId={setJoinTeamId} onFind={findLobby} onJoin={joinFoundLobby} onBack={() => store.setScreen("menu")} />;
   if (store.screen === "multi_lobby" && store.multiplayerLobby) return <LobbyView store={store} clubMap={clubMap} chat={chat} chatInput={chatInput} setChatInput={setChatInput} onChat={sendMessage} onReady={toggleReady} onBack={() => store.setScreen("menu")} />;
